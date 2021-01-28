@@ -118,7 +118,7 @@ class Subcategory(db.Model):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('dash'))
+        return redirect(url_for('home'))
     else:
         if request.method == 'POST':
             username = request.form.get('username')
@@ -136,7 +136,7 @@ def register():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dash'))
+        return redirect(url_for('home'))
     nxt = request.args.get('next')
     if request.method == 'POST':
         email = request.form.get('email')
@@ -148,7 +148,7 @@ def login():
                 if nxt:
                     return redirect(nxt)
                 flash('you are logged in successfully', 'success')
-                return redirect(url_for('dash'))
+                return redirect(url_for('home'))
             flash("wrong password ensure you enter the correct credentials", 'danger')
             return redirect(url_for('login'))
         flash('the user does not exist please create account !', 'danger')
@@ -159,9 +159,9 @@ def login():
 def logout():
     if current_user.is_authenticated:
         logout_user()
-        return redirect(url_for('dash'))
+        return redirect(url_for('home'))
     else:
-        return redirect(url_for('dash'))
+        return redirect(url_for('home'))
 
 
 @app.route('/', methods=['GET'])
@@ -193,7 +193,7 @@ def insert_desc():
 
     db.session.add(data)
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 @app.route('/update/<int:id>', methods=['POST'])
 def update(id):
@@ -208,7 +208,7 @@ def insert_category():
     cat = Category(name=data)
     db.session.add(cat)
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 # insert subcategory
 @app.route('/add/subcategory', methods=['POST'])
@@ -218,7 +218,7 @@ def insert_subcategory():
     cat = Subcategory(name=data, category=category)
     db.session.add(cat)
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 
 #delete category
@@ -236,7 +236,7 @@ def delete_category():
     for det in desc:
         db.session.delete(det)
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 # delete subcategory
 @app.route('/delete/subcategory/', methods=['POST'])
@@ -249,7 +249,7 @@ def delete_subcategory():
     db.session.delete(sub)
     for det in desc: db.session.delete(det)
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 # delete description
 @app.route('/delete/description/', methods=['POST'])
@@ -259,7 +259,7 @@ def delete_description():
     desc = Description.query.filter_by(category_id=prod_id).first()
     db.session.delete(desc)
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 
 # updating values in the models
@@ -271,7 +271,7 @@ def update_category():
     cat = Category.query.filter_by(id=id).first()
     cat.name = name
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 # update subcategory
 @app.route('/update/subcategory', methods=['POST'])
@@ -281,7 +281,7 @@ def update_subcategory():
     cat = Subcategory.query.filter_by(id=id).first()
     cat.name = name
     db.session.commit()
-    return redirect(url_for('dash'))
+    return redirect(url_for('home'))
 
 # api for data
 @app.route('/api', methods=['GET'])
