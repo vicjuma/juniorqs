@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </style>
+        <title>Categories Items and Descriptions</title>
+        <link rel="shortcut icon" href="http://sales.mouseinc.net/public/images/icon.ico">
+        <link rel="stylesheet" href="./static/styles/bootstrap.min.css">
+        <link rel="stylesheet" href="./static/styles/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="./static/styles/font-awesome.min.css">
+        <link rel="stylesheet" href="./static/css/font-awesome-animation.min.css">
+        
+        <script src="./static/scripts/jquery.min.js"></script>
+        <script src="./static/scripts/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="./static/css/main.css">
+        <script src="./static/scripts/main.js"></script>
+    <body>
+        <nav class="navbar">
+            {% if current_user.is_authenticated%}
+            {% if current_user.is_admin == True%}
+            <a href="{{url_for('dash')}}">Dashboard</a>
+            {% endif%}
+        <a href="{{url_for('logout')}}">logout</a>
+        {% else %}
+        <a href="{{url_for('login')}}">login</a>
+        <a href="{{url_for('register')}}">register</a>
+        {% endif %}
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarCollapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" style="margin-top:2">
+                        JuniorQS
+                    </a>
+                </div>
+                    </ul>
+                    {% if current_user.is_authenticated and current_user.is_admin == True%}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a>
+                                 <b><span>Admin Name: {{current_user.username}}</span></b>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user navbarIcons"></i>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-menu-header text-center">
+                                    <strong>Account</strong>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{{url_for('logout')}}">
+                                        <i class="fa fa-sign-out"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% endif%}
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+                    
+<div class="pannel-main">   
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- sort and co row-->
+            <div class="row">
+                <div class="col-sm-12">
+                    {% if current_user.is_authenticated and current_user.is_admin == True%}
+                    <div class="col-sm-2 form-inline form-group-sm">
+                        <button class="btn btn-primary btn-sm" id="createItem">Add New Description</button>
+                    </div>
+                    {% endif %}
+
+                    <div class="col-sm-3 form-inline form-group-sm">
+                        <label for="itemsListPerPage">Show</label>
+                        <select id="itemsListPerPage" class="form-control">
+                            <option value="1">1</option>
+                            <option value="5">5</option>
+                            <option value="10" selected="">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label>per page</label>
+                    </div>
+
+                    <div class="col-sm-4 form-group-sm form-inline">
+                        <label for="itemsListSortBy">Sort by</label>
+                        <select id="itemsListSortBy" class="form-control">
+                            <option value="name-ASC">Description Unit (A-Z)</option>
+                            <option value="name-DESC">Description Unit (Z-A)</option>
+                            <option value="code-DESC">Item Price (Descending)</option>
+                            <option value="unitPrice-ASC">Item Price (lowest first)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3 form-inline form-group-sm">
+                        <label for="itemSearch"><i class="fa fa-search"></i></label>
+                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Items">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12">
+            <!--+++++++++++++++++++++++++FORM TO ADD A CATEGORY++++++++++++++++++++++-->
+            <div class="col-sm-4 hidden" id="createNewItemDiv">
+                <div class="well">
+                    <button class="close cancelAddItem">×</button><br>
+                    <!-- <form name="addcategoryform" role="form" action="{{url_for('insert_category')}}" method="POST">
+                        <div class="text-center errMsg" id="addCustErrMsg"></div>
+                        
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemdescription">Category Name</label>
+                                <input type="text" id="itemdescription" name="name" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
+                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-sm-6 form-group-sm">
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Category</button>
+                            </div>
+
+                            <div class="col-sm-6 form-group-sm">
+                                <button type="reset" id="cancelAddItem" class="btn btn-danger btn-sm cancelAddItem" form="addNewItemForm">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form name="addsubcategoryform" role="form" method="POST" action="{{url_for('insert_subcategory')}}">
+                        <div class="text-center errMsg" id="addCustErrMsg"></div>
+                        
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemdescription">Subacategory Name</label>
+                                <input type="text" id="itemdescription" name="name" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
+                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="categoryUpdateType">Category Name</label>
+                            <select id="categoryUpdateType" class="form-control checkField" name="category">
+                                {% for dat in cat%}
+                                <option value="{{dat.id}}">{{dat.name}}</option>
+                                {% endfor%}
+                            </select>
+                            <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-sm-6 form-group-sm">
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Subcategory</button>
+                            </div>
+
+                            <div class="col-sm-6 form-group-sm">
+                                <button type="reset" id="cancelAddItem" class="btn btn-danger btn-sm cancelAddItem" form="addNewItemForm">Cancel</button>
+                            </div>
+                        </div>
+                    </form>end of form -->
+		    <form name="addNewItemForm" id="addNewItemForm" role="form" action="{{url_for('insert_desc')}}" method="POST">
+                        <div class="text-center errMsg" id="addCustErrMsg"></div>
+                        
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemdescription">Description Name</label>
+                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
+                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemdescriptionunit">Description Unit</label>
+                                <input type="text" id="itemdescriptionunit" name="itemdescriptionunit" placeholder="Description Unit" maxlength="80" class="form-control">
+                                <span class="help-block errMsg" id="itemdescriptionunitErr"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="nairobi_price">Nairobi Price</label>
+                                <input type="number" id="nairobi_price" name="nairobi_price" placeholder="Nairobi Price" class="form-control" min="0" >
+                                <span class="help-block errMsg" id="nairobi_priceErr"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="coastal_price">Coastal Price</label>
+                                <input type="number" id="coastal_price" name="coastal_price" placeholder="Coastal Price" class="form-control">
+                                <span class="help-block errMsg" id="coastal_priceErr"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="western_price">Western Price</label>
+                                <input type="number" id="western_price" name="western_price" placeholder="Western Price" class="form-control">
+                                <span class="help-block errMsg" id="western_priceErr"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="northern_price">Northern Price</label>
+                                <input type="text" id="northern_price" name="nothern_price" placeholder="Northern Price" class="form-control">
+                                <span class="help-block errMsg" id="coastal_priceErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="categoryUpdateType">Category Name</label>
+                            <select id="categoryUpdateType" class="form-control checkField" name="category_id" required>
+                                {% for dat in cat%}
+                                <option value="{{dat.id}}">{{dat.name}}</option>
+                                {% endfor%}
+                            </select>
+                            <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                        </div>
+                        <div class="row">
+                            <label for="categoryUpdateType">Subcategory Name</label>
+                            <select id="categoryUpdateType" class="form-control checkField" name="subcategory_id">
+                                {% for dat in subcategory%}
+                                <option value="{{dat.id}}">{{dat.name}}</option>
+                                {% endfor%}
+                            </select>
+                            <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-sm-6 form-group-sm">
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Description</button>
+                            </div>
+
+                            <div class="col-sm-6 form-group-sm">
+                                <button type="reset" id="cancelAddItem" class="btn btn-danger btn-sm cancelAddItem" form="addNewItemForm">Cancel</button>
+                            </div>
+                        </div>
+                    </form><!-- end of form-->
+                </div>
+            </div>
+            
+            <!--- Item list div-->
+            <div class="col-sm-12" id="itemsListDiv">
+                <!-- Item list Table-->
+                <div class="row">
+                    <div class="col-sm-12" id="itemsListTable">
+<div class="col-sm-6">
+    Showing 1-4 of 4</div>
+
+
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+                <div class="table table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>DESCRIPTION NAME</th>
+                        <th>DESCRIPTION UNIT</th>
+                        <th>NAIROBI PRICE</th>
+                        <th>COASTAL PRICE</th>
+                        <th>WESTERN PRICE</th>
+                        <th>NORTHERN PRICE</th>
+                        <th>UPDATE</th>
+                        <th>DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <input type="hidden" value="1" class="curItemId">
+                        {% for det in cat%}
+						<td class="panel-heading" style="font-weight: bolder; text-transform: uppercase; color: blue;">{{det.name}}</td>
+						{% for _ in range(7)%}
+							<td></td>
+						{%endfor%}
+					</tr>
+					{% for sub in subcategory%}
+							{%if sub.category == det.id%}
+							<tr class="subcategory">
+								<td style="font-weight:700; color: green;">{{sub.name}}</td>
+								{% for _ in range(7)%}
+									<td></td>
+								{%endfor%}
+							</tr>
+						{%endif%}
+
+						{% for details in desc%}
+							<tr class="desc">
+								{%if details.subcategory_id == sub.id and details.category_id == det.id %}
+                                    <td>{{details.name}}</td>
+									<td>{{details.unit}}</td>
+									<td>{{details.nairobi_region}}</td>
+									<td>{{details.coastal_region}}</td>
+									<td>{{details.western_region}}</td>
+                                    <td>{{details.nothern_region}}</td>
+                                    <td><a class="pointer updateStock" id="stock-1">Update <i class="fa fa-pencil pointer"></i></a></td>
+                                    <td class="text-center"><i class="fa fa-trash text-danger delItem pointer"></i></td>
+								{% endif %}
+							</tr>
+						{%endfor%}
+					{%endfor%}
+				{% endfor%}
+                    </tr>
+                                                            
+               </tbody>
+            </table>
+        </div>
+        <!-- table div end-->
+            </div>
+    <!--- panel end-->
+</div>
+
+<!---Pagination div-->
+<div class="col-sm-12 text-center">
+    <ul class="pagination">
+            </ul>
+</div>
+</div>
+                </div>
+                <!--end of table-->
+            </div>
+            <!--- End of item list div-->
+
+        </div>
+    </div>
+    <!-- End of row of adding new item form and items list table-->
+</div>
+
+<!--+++++++++++++++++++++++++FORM TO UPDATE A CATEGORY++++++++++++++++++++++-->
+<div id="updateCategoryModal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h4 class="text-center">Update</h4>
+                <div id="stockUpdateFMsg" class="text-center"></div>
+            </div>
+            <div class="modal-body">
+		    <form name="updateStockForm" id="updateStockForm" role="form" method="POST">
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Description Name</label>
+                            <input type="text" readonly="" id="stockUpdateitemdescriptionunit" class="form-control">
+                        </div>
+                        
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Description Unit</label>
+                            <input type="text" readonly="" id="stockUpdateitemdescription" class="form-control">
+                        </div>
+                        
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Nairobi Price</label>
+                            <input type="text" readonly="" id="stockUpdateItemQInStock" class="form-control">
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Coastal Price</label>
+                            <input type="text" readonly="" id="stockUpdateItemQInStock" class="form-control">
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Western Price</label>
+                            <input type="text" readonly="" id="stockUpdateItemQInStock" class="form-control">
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Northern Price</label>
+                            <input type="text" readonly="" id="stockUpdateItemQInStock" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label for="categoryUpdateType">Subcategory Name</label>
+                        <select id="categoryUpdateType" class="form-control checkField">
+                            
+                            <option value="">---</option>
+                            <option value="newStock">Subcategory 1</option>
+                            <option value="deficit">Subcategory 2</option>
+                        </select>
+                        <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                    </div>
+                    <input type="hidden" id="stockUpdateItemId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="stockUpdateSubmit">Update</button>
+                <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of modal -->
+<script src="./static/scripts/items.js"></script>                </div>
+                <!-- Main content ends -->
+            </div>
+        </div>
+
+        <footer class="container-fluid text-center hidden-print">
+            <p>
+                <i class="fa fa-copyright"></i>
+                Copyright <a href="http://www.vicjuma945.com/">victor oluoch</a> (2020)
+            </p>
+        </footer>

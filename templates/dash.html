@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='dash.css')}}"">
+</head>
+
+<body>
+    <div>
+        <h1>Add details</h1>
+        <form action=" {{url_for('insert_desc')}}" method="POST">
+    <div class="first">
+        <div>
+            <label for="category">Select Category</label><br>
+            <select name="category" id="">
+                {% for cats in cat%}
+                <option value="{{cats.id}}">{{cats.name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+        <div>
+            <label for="subcategory">Select SubCategory</label><br>
+            <select name="subcategory" id="">
+                {% for subs in subcategory%}
+                <option value="{{subs.id}}">{{subs.name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+        <div>
+            <label for="desc">description</label><br>
+            <input type="text" name="des" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="desc">Nairobi</label><br>
+            <input type="text" name="nairobi" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="desc">coastal region</label><br>
+            <input type="text" name="coastal" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="desc">nothern region</label><br>
+            <input type="text" name="nothern" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="desc">western region region</label><br>
+            <input type="text" name="western" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="desc">short code</label><br>
+            <input type="text" name="unit" autocomplete="off" required>
+        </div>
+    </div>
+    <input type="submit" value="add description">
+    </form>
+    </div>
+    <div class="category">
+        <form action="{{url_for('insert_category')}}" method="POST">
+            <div>
+                <label for="category">Add category</label>
+                <input type="text" name="name">
+            </div>
+            <input type="submit" value="add category">
+        </form>
+    </div>
+
+    <div class="subcategory">
+        <form action="{{url_for('insert_subcategory')}}" method="POST">
+            <div>
+                <label for="category">Add subcategory name</label>
+                <input type="text" name="name">
+            </div>
+            <div>
+                <label for="category">select category</label>
+                <select name="category" id="">
+                    {% for cats in cat%}
+                    <option value="{{cats.id}}">{{cats.name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+            <input type="submit" value="add category">
+        </form>
+    </div>
+    <div>
+        <h1>Delete data</h1>
+        <form action="{{url_for('delete_description')}}" method="post">
+            <select name="id" id="">
+                {% for cats in desc%}
+                <option value="{{cats.id}}">{{cats.name}}</option>
+                {%endfor%}
+            </select>
+            <input type="submit" value="delete description">
+        </form>
+    </div>
+    <div>
+        <h1>Delete Category</h1>
+        <form action="{{url_for('delete_category')}}" method="post">
+            <select name="id" id="">
+                {% for cats in cat%}
+                <option value="{{cats.id}}">{{cats.name}}</option>
+                {%endfor%}
+            </select>
+            <input type="submit" value="delete description">
+        </form>
+    </div>
+    <div>
+        <h1>Delete Subcategory</h1>
+        <form action="{{url_for('delete_subcategory')}}" method="post">
+            <select name="id" id="">
+                {% for cats in subcategory%}
+                <option value="{{cats.id}}">{{cats.name}}</option>
+                {%endfor%}
+            </select>
+            <input type="submit" value="delete description">
+        </form>
+    </div>
+    </body>
+
+</html>
