@@ -3,22 +3,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </style>
-        <title>Categories Items and Descriptions</title>
-        <link rel="shortcut icon" href="http://sales.mouseinc.net/public/images/icon.ico">
-        <link rel="stylesheet" href="./static/styles/bootstrap.min.css">
-        <link rel="stylesheet" href="./static/styles/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="./static/styles/font-awesome.min.css">
-        <link rel="stylesheet" href="./static/css/font-awesome-animation.min.css">
-        
-        <script src="./static/scripts/jquery.min.js"></script>
-        <script src="./static/scripts/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="./static/css/main.css">
-        <script src="./static/scripts/main.js"></script>
+    <title>Categories Items and Descriptions</title>
+    <link rel="shortcut icon" href="http://sales.mouseinc.net/public/images/icon.ico">
+    <link rel="stylesheet" href="./static/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="./static/styles/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="./static/styles/font-awesome.min.css">
+    <link rel="stylesheet" href="./static/css/font-awesome-animation.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><script src="https://kit.fontawesome.com/e6bee6f630.js" crossorigin="anonymous"></script>
+    
+    <script src="./static/scripts/jquery.min.js"></script>
+    <script src="./static/scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./static/css/main.css">
+    <script src="./static/scripts/main.js"></script>
     <body>
         <nav class="navbar">
             {% if current_user.is_authenticated%}
             {% if current_user.is_admin == True%}
-            <a href="{{url_for('dash')}}">Dashboard</a>
+            <a href="{{url_for('home')}}">Dashboard</a>
             {% endif%}
         <a href="{{url_for('logout')}}">logout</a>
         {% else %}
@@ -76,11 +77,17 @@
                 <div class="col-sm-12">
                     {% if current_user.is_authenticated and current_user.is_admin == True%}
                     <div class="col-sm-2 form-inline form-group-sm">
-                        <button class="btn btn-primary btn-sm" id="createItem">Add New Description</button>
+                        <button class="btn btn-primary btn-sm" id="createItem" style="margin-left: 1rem;">+ Description</button>
+                    </div>
+                    <div class="col-sm-2 form-inline form-group-sm">
+                        <button class="btn btn-primary btn-sm" id="createSubcategory" style="margin-left: 1rem;">+ Subcategory</button>
+                    </div>
+                    <div class="col-sm-2 form-inline form-group-sm">
+                        <button class="btn btn-primary btn-sm" id="createCategory" style="margin-left: 1rem;">+ Category</button>
                     </div>
                     {% endif %}
 
-                    <div class="col-sm-3 form-inline form-group-sm">
+                    <!-- <div class="col-sm-3 form-inline form-group-sm">
                         <label for="itemsListPerPage">Show</label>
                         <select id="itemsListPerPage" class="form-control">
                             <option value="1">1</option>
@@ -109,72 +116,19 @@
                     <div class="col-sm-3 form-inline form-group-sm">
                         <label for="itemSearch"><i class="fa fa-search"></i></label>
                         <input type="search" id="itemSearch" class="form-control" placeholder="Search Items">
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
     </div>
-    <hr>
+    <!-- <hr> -->
     <div class="row">
         <div class="col-sm-12">
             <!--+++++++++++++++++++++++++FORM TO ADD A CATEGORY++++++++++++++++++++++-->
             <div class="col-sm-4 hidden" id="createNewItemDiv">
                 <div class="well">
                     <button class="close cancelAddItem">×</button><br>
-                    <!-- <form name="addcategoryform" role="form" action="{{url_for('insert_category')}}" method="POST">
-                        <div class="text-center errMsg" id="addCustErrMsg"></div>
-                        
-                        <br>
-                        
-                        <div class="row">
-                            <div class="col-sm-12 form-group-sm">
-                                <label for="itemdescription">Category Name</label>
-                                <input type="text" id="itemdescription" name="name" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
-                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
-                            </div>
-                        </div>
-                        <div class="row text-center">
-                            <div class="col-sm-6 form-group-sm">
-                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Category</button>
-                            </div>
-
-                            <div class="col-sm-6 form-group-sm">
-                                <button type="reset" id="cancelAddItem" class="btn btn-danger btn-sm cancelAddItem" form="addNewItemForm">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-                    <form name="addsubcategoryform" role="form" method="POST" action="{{url_for('insert_subcategory')}}">
-                        <div class="text-center errMsg" id="addCustErrMsg"></div>
-                        
-                        <br>
-                        
-                        <div class="row">
-                            <div class="col-sm-12 form-group-sm">
-                                <label for="itemdescription">Subacategory Name</label>
-                                <input type="text" id="itemdescription" name="name" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
-                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="categoryUpdateType">Category Name</label>
-                            <select id="categoryUpdateType" class="form-control checkField" name="category">
-                                {% for dat in cat%}
-                                <option value="{{dat.id}}">{{dat.name}}</option>
-                                {% endfor%}
-                            </select>
-                            <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
-                        </div>
-                        <div class="row text-center">
-                            <div class="col-sm-6 form-group-sm">
-                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Subcategory</button>
-                            </div>
-
-                            <div class="col-sm-6 form-group-sm">
-                                <button type="reset" id="cancelAddItem" class="btn btn-danger btn-sm cancelAddItem" form="addNewItemForm">Cancel</button>
-                            </div>
-                        </div>
-                    </form>end of form -->
-		    <form name="addNewItemForm" id="addNewItemForm" role="form" action="{{url_for('insert_desc')}}" method="POST">
+                    <form name="addNewItemForm" id="addNewItemForm" role="form" action="{{url_for('insert_desc')}}" method="POST">
                         <div class="text-center errMsg" id="addCustErrMsg"></div>
                         
                         <br>
@@ -256,6 +210,74 @@
                     </form><!-- end of form-->
                 </div>
             </div>
+
+            <!-- ----------------------------->
+            <div class="col-sm-4 hidden" id="createNewSubcategoryDiv">
+                <div class="well">
+                    <button class="close cancelAddSubcategory">×</button><br>
+                    <form name="addNewSubcategoryForm" id="addNewSubcategoryForm" role="form">
+                        <div class="text-center errMsg" id="addCustErrMsg"></div>
+                        
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemdescription">Subcategory Name</label>
+                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
+                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="categoryUpdateType">Category Name</label>
+                            <select id="categoryUpdateType" class="form-control checkField">
+                                <option value="">---</option>
+                                <option value="newStock">Category 1</option>
+                                <option value="deficit">Category 2</option>
+                            </select>
+                            <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-sm-6 form-group-sm">
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Subcategory</button>
+                            </div>
+
+                            <div class="col-sm-6 form-group-sm">
+                                <button type="reset" id="cancelAddSubcategory" class="btn btn-danger btn-sm cancelAddSubcategory" form="addNewItemForm">Cancel</button>
+                            </div>
+                        </div>
+                    </form><!-- end of form-->
+                </div>
+            </div>
+            
+            <div class="col-sm-4 hidden" id="createNewCategoryDiv">
+                <div class="well">
+                    <button class="close cancelAddCategory">×</button><br>
+                    <form name="addNewCategoryForm" id="addNewCategoryForm" role="form">
+                        <div class="text-center errMsg" id="addCustErrMsg"></div>
+                        
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemdescription">Category Name</label>
+                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
+                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-sm-6 form-group-sm">
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Category</button>
+                            </div>
+
+                            <div class="col-sm-6 form-group-sm">
+                                <button type="reset" id="cancelAddCategory" class="btn btn-danger btn-sm cancelAddCategory" form="addNewItemForm">Cancel</button>
+                            </div>
+                        </div>
+                    </form><!-- end of form-->
+                </div>
+            </div>
+            
+               <!---------------------------- -->
             
             <!--- Item list div-->
             <div class="col-sm-12" id="itemsListDiv">
@@ -263,35 +285,41 @@
                 <div class="row">
                     <div class="col-sm-12" id="itemsListTable">
 <div class="col-sm-6">
-    Showing 1-4 of 4</div>
+   <br></div>
 
 
 <div class="col-xs-12">
-    <div class="panel panel-primary">
+    <div class="panel" style="background-image: linear-gradient(to right, #020B40, #020F59); color: white;">
+        <!-- Default panel contents -->
+        <div class="panel-heading">EARTHWORKS</div>
+        <div class="panel-heading">Excavations</div>
                 <div class="table table-responsive">
-            <table class="table table-bordered" style="background-color: white; opacity: 1;">
+            <table class="table" style="background-image: linear-gradient(to right, #020B40, #020F59); opacity: 1; color: white; font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bolder;">
                 <thead>
-                    <tr style="background-color: transparent;">
-                        <th>DESCRIPTION NAME</th>
-                        <th>DESCRIPTION UNIT</th>
+                    <tr>
+                        <th>ID</th>
+                        <th>DESCRIPTION</th>
+                        <th>UNIT</th>
                         <th>NAIROBI PRICE</th>
                         <th>COASTAL PRICE</th>
                         <th>WESTERN PRICE</th>
                         <th>NORTHERN PRICE</th>
+                        {% if current_user.is_authenticated and current_user.is_admin == True%}
                         <th>UPDATE</th>
                         <th>DELETE</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <input type="hidden" value="1" class="curItemId">
                         {% for det in cat%}
-						<td class="panel-heading" style="font-weight: bolder; text-transform: uppercase; color: blue; letter-spacing: .25rem;" colspan="8">{{det.name}}</td>
+						<td class="panel-heading" style="font-weight: bolder; text-transform: uppercase; color: white; letter-spacing: .25rem;" colspan="8">{{det.name}}</td>
 					</tr>
 					{% for sub in subcategory%}
 							{%if sub.category == det.id%}
 							<tr class="subcategory">
-								<td style="font-weight:700; color: green; letter-spacing: .15rem;" colspan="8">{{sub.name}}</td>
+								<td style="font-weight:700; color: white; letter-spacing: .15rem;" colspan="8">{{sub.name}}</td>
 							</tr>
 						{%endif%}
 
@@ -303,9 +331,9 @@
 									<td>
                                         <table>
                                             <tr>
-                                                <td>info</td>
-                                                <td>&nbsp;{{details.nairobi_region}}&nbsp;</td>
-                                                <td>info</td>
+                                                <td style="color: red;" class="large_font">{{details.nairobi_region * 1.05}}</td>
+                                                <td style="color: green;" class="large_font">&nbsp;{{details.nairobi_region}}&nbsp;</td>
+                                                <td style="color: gray;" class="large_font">{{details.nairobi_region * 0.95}}</td>
                                             </tr>
                                         </table>
                                         
@@ -313,32 +341,34 @@
 									<td>
                                         <table>
                                             <tr>
-                                                <td>info</td>
-                                                <td>&nbsp;{{details.coastal_region}}&nbsp;</td>
-                                                <td>info</td>
+                                                <td class="large_font">info</td>
+                                                <td class="large_font">&nbsp;{{details.coastal_region}}&nbsp;</td>
+                                                <td class="large_font">info</td>
                                             </tr>
                                         </table>
                                     </td>
 									<td>
                                         <table>
                                             <tr>
-                                                <td>info</td>
-                                                <td>&nbsp;{{details.western_region}}&nbsp;</td>
-                                                <td>info</td>
+                                                <td class="large_font">info</td>
+                                                <td class="large_font">&nbsp;{{details.western_region}}&nbsp;</td>
+                                                <td class="large_font">info</td>
                                             </tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table>
                                             <tr>
-                                                <td>Info</td>
-                                                <td>&nbsp;{{details.nothern_region}}&nbsp;</td>
-                                                <td>info</td>
+                                                <td class="large_font">Info</td>
+                                                <td class="large_font">&nbsp;{{details.nothern_region}}&nbsp;</td>
+                                                <td class="large_font">info</td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><a class="pointer updateStock" id="stock-1">Update <i class="fa fa-pencil pointer"></i></a></td>
-                                    <td class="text-center"><i class="fa fa-trash text-danger delItem pointer"></i></td>
+                                        {% if current_user.is_authenticated and current_user.is_admin == True%}
+                                        <td><a class="pointer updateStock" id="stock-1">Update <i class="fa fa-pencil pointer"></i></a></td>
+                                        <td class="text-center"><i class="fa fa-trash text-danger delItem pointer"></i></td>
+                                        {% endif %}
 								{% endif %}
 							</tr>
 						{%endfor%}
@@ -380,7 +410,7 @@
                 <div id="stockUpdateFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
-		    <form name="updateStockForm" id="updateStockForm" role="form" method="POST">
+                <form name="updateStockForm" id="updateStockForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label>Description Name</label>
@@ -413,7 +443,6 @@
                     <div class="row">
                         <label for="categoryUpdateType">Subcategory Name</label>
                         <select id="categoryUpdateType" class="form-control checkField">
-                            
                             <option value="">---</option>
                             <option value="newStock">Subcategory 1</option>
                             <option value="deficit">Subcategory 2</option>
@@ -431,6 +460,80 @@
     </div>
 </div>
 <!-- end of modal -->
+<div id="updateSubcategoryModal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h4 class="text-center">Update</h4>
+                <div id="stockUpdateFMsg" class="text-center"></div>
+            </div>
+            <div class="modal-body">
+                <form name="updateStockForm" id="updateStockForm" role="form">
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Subcategory Name</label>
+                            <input type="text" readonly="" id="stockUpdateitemdescriptionunit" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label for="categoryUpdateType">Category Name</label>
+                        <select id="categoryUpdateType" class="form-control checkField">
+                            <option value="">---</option>
+                            <option value="newStock">Category 1</option>
+                            <option value="deficit">Category 2</option>
+                        </select>
+                        <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                    </div>
+                    <input type="hidden" id="stockUpdateItemId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="stockUpdateSubmit">Update</button>
+                <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="updateCategoryModal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h4 class="text-center">Update</h4>
+                <div id="stockUpdateFMsg" class="text-center"></div>
+            </div>
+            <div class="modal-body">
+                <form name="updateCategoryForm" id="updateCategoryForm" role="form">
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Subcategory Name</label>
+                            <input type="text" readonly="" id="stockUpdateitemdescriptionunit" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label for="categoryUpdateType">Category Name</label>
+                        <select id="categoryUpdateType" class="form-control checkField">
+                            <option value="">---</option>
+                            <option value="newStock">Category 1</option>
+                            <option value="deficit">Category 2</option>
+                        </select>
+                        <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                    </div>
+                    <input type="hidden" id="stockUpdateItemId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="stockUpdateSubmit">Update</button>
+                <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  -->
 <script src="./static/scripts/items.js"></script>                </div>
                 <!-- Main content ends -->
             </div>

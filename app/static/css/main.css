@@ -1,19 +1,17 @@
-.row.content {height: 1050px}
 
-/* Set background color and 100% height */
-
-/* On small screens, set height to 'auto' for the grid */
-@media screen and (max-width: 767px) {
-  .row.content {height: auto;} 
-}
-
-/* Remove the navbar's default margin-bottom and rounded borders */ 
 .navbar {
   margin-bottom: 0;
   border-radius: 0;
 }
 
-/* Add background color and some padding to the footer */
+td, th, table{
+  border: none !important;
+}
+
+table{
+  width: 100% !important;
+}
+
 footer {
   background-color: transparent;
   color: white;
@@ -39,10 +37,6 @@ body{
     background: url(./../images/background.jpg);
     font-size: 12px;
     font-family:monospace
-}
-
-.errMsg{
-    color:red; font-size:10px 
 }
 
 .navbarIcons{

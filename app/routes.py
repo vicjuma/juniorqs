@@ -1,20 +1,11 @@
+from app.models import User, Category, Description, Subcategory
 from flask import Flask, jsonify, request, render_template, redirect, url_for, abort, flash
-from flask_sqlalchemy import SQLAlchemy
 import click
-from flask_login import UserMixin, LoginManager, current_user, login_required, login_user,logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-
-
-app = Flask(__name__, static_url_path='/static')
-app.config.from_object('config.Config')
-
-db = SQLAlchemy(app)
-
-loginmanager = LoginManager(app)
-loginmanager.login_message = "you need to be authenticated in order to access this page".capitalize()
-loginmanager.login_message_category = "warning"
-loginmanager.login_view = "login"
+from app.forms import RegistrationForm, LoginForm
+from app import app, db, bcrypt
 
 
 """
@@ -41,119 +32,38 @@ def adminsonly():
         return wrapperfunc
     return restrict
 
-
-class User(UserMixin,db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(250), nullable=False)
-    lastname = db.Column(db.String(250))
-    username = db.Column(db.String(200))
-    email = db.Column(db.String(200), unique=True)
-    password = db.Column(db.String(250))
-    is_admin = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return '%d'%self.id
-
-    @loginmanager.user_loader
-    def user_loader(id):
-        return User.query.get(int(id))
-
-
-    def __repr__(self):
-        return '<%s>'%self.name
-
-
-    def to_dict(self):
-        return {
-                "name": self.username,
-                "email": self.email,
-                "first name": self.firstname
-                }
-
-
-
-class Description(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    unit = db.Column(db.String(250), nullable=False)
-    subcategory_id = db.Column(db.Integer, db.ForeignKey('subcategory.id'), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    nairobi_region = db.Column(db.Integer)
-    coastal_region = db.Column(db.Integer)
-    western_region = db.Column(db.Integer)
-    nothern_region = db.Column(db.Integer)
-    name = db.Column(db.String(250), nullable=False)
-
-    def __repr__(self):
-        return '%d'%self.name
-    
-    def to_dict(self):
-        return {
-            "id":self.id,
-            "name": self.name,
-            "category id": self.subcategory_id,
-            "nairobi": self.nairobi_region,
-            "coast": self.coastal_region,
-            "western": self.western_region,
-            "nothern": self.nothern_region
-        }
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    subcategory_id = db.relationship('Subcategory', backref='subcategory', lazy='dynamic')
-    description_id = db.relationship('Description', backref='desc', lazy='dynamic')
-    name = db.Column(db.String(250))
-
-    def __repr__(self):
-        return '%d'%self.name
-
-class Subcategory(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    description_id = db.relationship('Description', backref='description', lazy='dynamic')
-    category = db.Column(db.Integer, db.ForeignKey('category.id'))
-    name = db.Column(db.String(250))
-
-#authentication and login
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    form = RegistrationForm()
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     else:
         if request.method == 'POST':
-            username = request.form.get('username')
-            email = request.form.get('email')
-            firstname = request.form.get('firstname')
-            lastname = request.form.get('lastname')
-            password = request.form.get('password')
-            data = User(username=username, email=email, firstname=firstname,
-            lastname=lastname, password=generate_password_hash(password=password, method='sha256'))
-            db.session.add(data)
-            db.session.commit()
-            return redirect(url_for('login'))
-        return render_template('register.html')
+            if form.validate_on_submit():
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                user = User(firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=hashed_password)
+                db.session.add(user)
+                db.session.commit()
+                flash(f'Account created successfully, log in', 'success')
+                return redirect(url_for('login'))
+        return render_template('register.html', title='Register', form=form)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    form = LoginForm()
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     nxt = request.args.get('next')
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        user = User.query.filter_by(email=email).first()
-        if user:
-            if check_password_hash(user.password, password):
-                login_user(user=user, remember=True)
-                if nxt:
-                    return redirect(nxt)
-                flash('you are logged in successfully', 'success')
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
                 return redirect(url_for('home'))
-            flash("wrong password ensure you enter the correct credentials", 'danger')
-            return redirect(url_for('login'))
-        flash('the user does not exist please create account !', 'danger')
-        return redirect(url_for('register'))
-    return render_template('login.html')
+            else:
+                flash('the user does not exist please create account !', 'danger')
+                return redirect(url_for('register'))
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/logout')
 def logout():
@@ -291,8 +201,3 @@ def api_home():
     for det in desc:
         data.append(det.to_dict())
     return jsonify(data=data)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-

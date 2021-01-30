@@ -46,7 +46,8 @@ footer {
 body{
     background-color: transparent;
     font-size: 12px;
-    font-family:monospace
+    font-family:monospace;
+    position: relative;
 }
 
 .errMsg{
@@ -55,6 +56,17 @@ body{
 
 .infoMsg{
     color:lightblue; font-size:10px 
+}
+
+.err-div{
+  display: block;
+  position: relative;
+}
+
+.err{
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 .custDetail{

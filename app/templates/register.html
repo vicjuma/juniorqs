@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="/static/images/icon.ico">
+    <!-- favicon ends --->
+    <!-- - LOAD FILES-->
+    <link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/styles/font-awesome.min.css">
+    <script src="scripts/jquery.min.js"></script>
+    <!-- CSS-->
+    <link rel="stylesheet" href="/static/styles/form-elements.css">
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="stylesheet" href="/static/styles/main.css"><script src="https://kit.fontawesome.com/e6bee6f630.js" crossorigin="anonymous"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
+    <!--if lt IE 9-->
+  </head>
+  <body>
+    <!-- Top content-->
+    <div class="top-content">
+      <div class="inner-bg">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 text">
+              <div style="font-size:100px;color:white">
+                <h1>Junior QS</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+              {%with messages= get_flashed_messages(with_categories=true)%}
+                {% if messages %}
+                  {%for category, message in messages%}
+                    <div class="alert alert-{{category}}">
+                      {{message}}
+                    </div>
+                  {%endfor%}
+                {%endif%}
+              {%endwith%}
+              <div class="bg-primary text-center"><span id="errMsg"></span></div>
+              <div class="form-bottom">
+                <form id="loginForm" action="{{url_for('register')}}" method="POST">
+                  {{ form.hidden_tag() }}
+                  <div class="form-group" style="display:flex">
+                    {{ form.firstname.label(class="sr-only") }}<i class="fas fa-user" style="font-size:1.5rem;margin:1.5rem"></i>
+                    <!-- {% if form.firstname.errors %}
+                      {{ form.firstname(class="form-control checkField err-div", autocomplete="off")}}
+                      <div style="color: red !important; font-size: smaller !important;">
+                        {% for error in form.firstname.errors %}
+                          <span class="err">{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                    {% endif%} -->
+                    {{ form.firstname(class="form-control checkField", autocomplete="off")}}
+                  </div>
+                  <div class="form-group" style="display:flex">
+                    <label>{{ form.lastname.label(class="sr-only") }}<i class="fas fa-user" style="font-size:1.5rem;margin:1.5rem"></i></label>
+                    {{ form.lastname(class="form-control checkField", autocomplete="off")}}
+                  </div>
+                  <div class="form-group" style="display:flex">
+                    <label>{{ form.username.label(class="sr-only") }}<i class="fas fa-user" style="font-size:1.5rem;margin:1.5rem"></i></label>
+                    {{ form.username(class="form-control checkField", autocomplete="off")}}
+                  </div>
+                  <div class="form-group" style="display:flex; position: relative;">
+                    <label>{{ form.email.label(class="sr-only") }}<i class="fas fa-at" style="font-size:1.5rem;margin:1.5rem;"></i></label>
+                    {{ form.email(class="form-control checkField", autocomplete="off")}}
+                  </div>
+                  <div class="form-group" style="display:flex">
+                    <label>{{ form.password.label(class="sr-only") }}<i class="fas fa-lock" style="font-size:1.5rem;margin:1.5rem"></i></label>
+                    {{ form.password(class="form-control checkField", autocomplete="off")}}
+                  </div>
+                  <div class="form-group" style="display:flex">
+                    <label>{{ form.confirm_password.label(class="sr-only") }}<i class="fas fa-lock" style="font-size:1.5rem;margin:1.5rem"></i></label>
+                    {{ form.confirm_password(class="form-control checkField", autocomplete="off")}}
+                  </div>
+                  <div style="text-align: center;">
+                    {{ form.submit_signup(class='btn btn-primary')}}
+                  </div>
+                  <div style="text-align: center; color: #f5f5f5;"><small>Already have an account <a href="{{ url_for('login') }}" style="text-decoration: none;color: rgb(128, 26, 0);"><strong>Sign In</strong></a></small></div>
+                  
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 text-center" style="color:white"><a class="text-primary" href="http://juniorqs.herokuapp.com/" target="_blank">Junior QS</a> &copy;(2020)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Javascript-->
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/gquery.backstretch.min.js"></script>
+    <!-- Javascript--->
+  </body>
+</html>

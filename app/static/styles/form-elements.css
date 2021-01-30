@@ -29,6 +29,7 @@ textarea.form-control {
 }
 
 input[type="email"]:focus, 
+input[type="text"]:focus,
 input[type="password"]:focus, 
 textarea:focus, 
 textarea.form-control:focus {
