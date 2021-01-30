@@ -86,37 +86,6 @@
                         <button class="btn btn-primary btn-sm" id="createCategory" style="margin-left: 1rem;">+ Category</button>
                     </div>
                     {% endif %}
-
-                    <!-- <div class="col-sm-3 form-inline form-group-sm">
-                        <label for="itemsListPerPage">Show</label>
-                        <select id="itemsListPerPage" class="form-control">
-                            <option value="1">1</option>
-                            <option value="5">5</option>
-                            <option value="10" selected="">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <label>per page</label>
-                    </div>
-
-                    <div class="col-sm-4 form-group-sm form-inline">
-                        <label for="itemsListSortBy">Sort by</label>
-                        <select id="itemsListSortBy" class="form-control">
-                            <option value="name-ASC">Description Unit (A-Z)</option>
-                            <option value="name-DESC">Description Unit (Z-A)</option>
-                            <option value="code-DESC">Item Price (Descending)</option>
-                            <option value="unitPrice-ASC">Item Price (lowest first)</option>
-                        </select>
-                    </div>
-
-                    <div class="col-sm-3 form-inline form-group-sm">
-                        <label for="itemSearch"><i class="fa fa-search"></i></label>
-                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Items">
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -215,7 +184,7 @@
             <div class="col-sm-4 hidden" id="createNewSubcategoryDiv">
                 <div class="well">
                     <button class="close cancelAddSubcategory">×</button><br>
-                    <form name="addNewSubcategoryForm" id="addNewSubcategoryForm" role="form">
+                    <form name="addNewSubcategoryForm" id="addNewSubcategoryForm" role="form" action="{{url_for('insert_subcategory')}}" method="POST">
                         <div class="text-center errMsg" id="addCustErrMsg"></div>
                         
                         <br>
@@ -223,16 +192,15 @@
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
                                 <label for="itemdescription">Subcategory Name</label>
-                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
-                                <span class="help-block errMsg" id="itemdescriptionErr"></span>
+                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="" name="name">
                             </div>
                         </div>
                         <div class="row">
                             <label for="categoryUpdateType">Category Name</label>
-                            <select id="categoryUpdateType" class="form-control checkField">
-                                <option value="">---</option>
-                                <option value="newStock">Category 1</option>
-                                <option value="deficit">Category 2</option>
+                            <select id="categoryUpdateType" class="form-control checkField" name="category_id" required>
+                                {% for dat in cat%}
+                                <option value="{{dat.id}}">{{dat.name}}</option>
+                                {% endfor%}
                             </select>
                             <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
                         </div>
@@ -252,7 +220,7 @@
             <div class="col-sm-4 hidden" id="createNewCategoryDiv">
                 <div class="well">
                     <button class="close cancelAddCategory">×</button><br>
-                    <form name="addNewCategoryForm" id="addNewCategoryForm" role="form">
+                    <form name="addNewCategoryForm" id="addNewCategoryForm" role="form" action="{{url_for('insert_category')}}" method="POST">
                         <div class="text-center errMsg" id="addCustErrMsg"></div>
                         
                         <br>
@@ -260,7 +228,7 @@
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
                                 <label for="itemdescription">Category Name</label>
-                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="">
+                                <input type="text" id="itemdescription" name="itemdescription" placeholder="Description Name" maxlength="80" class="form-control" autofocus="" name="name">
                                 <span class="help-block errMsg" id="itemdescriptionErr"></span>
                             </div>
                         </div>
@@ -290,14 +258,10 @@
 
 <div class="col-xs-12">
     <div class="panel" style="background-image: linear-gradient(to right, #020B40, #020F59); color: white;">
-        <!-- Default panel contents -->
-        <div class="panel-heading">EARTHWORKS</div>
-        <div class="panel-heading">Excavations</div>
                 <div class="table table-responsive">
             <table class="table" style="background-image: linear-gradient(to right, #020B40, #020F59); opacity: 1; color: white; font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bolder;">
                 <thead>
-                    <tr>
-                        <th>ID</th>
+                    <tr style="background-color: transparent;">
                         <th>DESCRIPTION</th>
                         <th>UNIT</th>
                         <th>NAIROBI PRICE</th>
