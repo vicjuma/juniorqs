@@ -43,3 +43,7 @@ body{
     color:#337ab7;
     font-size:16px
 }
+
+.subcategory{
+  background-image: linear-gradient(to right, #020B40, #020F59);
+}
