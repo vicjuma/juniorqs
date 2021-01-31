@@ -87,12 +87,12 @@ def home():
 @app.route('/insert/description', methods=['POST'])
 def insert_desc():
     name = request.form.get('itemdescription')
-    category_id = request.form.get('category_id')
-    subcategory_id = request.form.get('subcategory_id')
-    nairobi = request.form.get('nairobi_price')
-    coastal = request.form.get('coastal_price')
-    nothern = request.form.get('nothern_price')
-    western = request.form.get('western_price')
+    category_id = int(request.form.get('category_id'))
+    subcategory_id = int(request.form.get('subcategory_id'))
+    nairobi = int(request.form.get('nairobi_price'))
+    coastal = int(request.form.get('coastal_price'))
+    nothern = int(request.form.get('nothern_price'))
+    western = int(request.form.get('western_price'))
     unit = request.form.get('itemdescriptionunit')
 
     data = Description(name=name, category_id=category_id,
@@ -105,11 +105,20 @@ def insert_desc():
     db.session.commit()
     return redirect(url_for('home'))
 
-@app.route('/update/<int:id>', methods=['POST'])
-def update(id):
-    return {
-            "message": "data updated"
-            }
+# @app.route('/update/<int:id>', methods=['POST'])
+# def update_category(id):
+#     return {
+#             "message": "data updated"
+#             }
+
+# add adminstrator
+@app.route('/add/user/<int:id>', methods=['POST'])
+def update_user(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    user.is_admin = True
+    db.session.commit()
+    return redirect(url_for('home'))
+
 
 # insert category
 @app.route('/add/category', methods=['POST'])
@@ -124,7 +133,7 @@ def insert_category():
 @app.route('/add/subcategory', methods=['POST'])
 def insert_subcategory():
     data = request.form.get('name')
-    category = request.form.get('category_id')
+    category = int(request.form.get('category_id'))
     cat = Subcategory(name=data, category=category)
     db.session.add(cat)
     db.session.commit()
