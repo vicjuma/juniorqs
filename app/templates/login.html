@@ -50,14 +50,28 @@
                     <label>{{ form.email.label(class="sr-only") }}<i class="fas fa-at" style="font-size:1.5rem;margin:1.5rem"></i></label>
                     {{ form.email(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.email.errors%}
+                  {% for errors in form.email.errors%}
+                  <div>
+                    <p class="text text-danger">{{errors}}</p>
+                  </div>
+                  {%endfor%}
+                {%endif%}
                   <div class="form-group" style="display:flex">
                     <label>{{ form.password.label(class="sr-only") }}<i class="fas fa-user" style="font-size:1.5rem;margin:1.5rem"></i></label>
                     {{ form.password(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.password.errors%}
+                      {% for errors in form.password.errors%}
+                      <div>
+                        <p class="text text-danger">{{errors}}</p>
+                      </div>
+                      {%endfor%}
+                  {%endif%}
                   <div style="text-align: center;">
                     {{ form.submit_login(class='btn btn-primary')}}
                   </div>
-                  <div style="text-align: center; color: #f5f5f5;"><small>Don't have an account yet? <a href="{{ url_for('login') }}" style="text-decoration: none;color: rgb(128, 26, 0);"><strong>Sign Up</strong></a></small></div>
+                  <div style="text-align: center; color: #f5f5f5;"><small>Don't have an account yet? <a href="{{ url_for('register') }}" style="text-decoration: none;color: rgb(128, 26, 0);"><strong>Sign Up</strong></a></small></div>
                 </form>
               </div>
             </div>

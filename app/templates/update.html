@@ -1,0 +1,51 @@
+{% extends 'public/main.html'%}
+{% block body%}
+<div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="POST" action="{{url_for('update_description', id=desc.id)}}">
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Description Name</label>
+                            <input type="text" name="name" id="stockUpdateitemdescriptionunit" class="form-control" value="{{desc.name}}">
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Description Unit</label>
+                            <input type="text" name="unit" id="stockUpdateitemdescription" class="form-control" value="{{desc.unit}}">
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Nairobi Price</label>
+                            <input type="text" name="nairobi_price" id="nairobi_price" class="form-control" value="{{desc.nairobi_region}}">
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Coastal Price</label>
+                            <input type="text" name="coastal_price" id="coastal_price" class="form-control" value="{{desc.coastal_region}}">
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Western Price</label>
+                            <input type="text" name="western_price" id="western_price" class="form-control" value="{{desc.western_region}}">
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label>Northern Price</label>
+                            <input type="text" name="nothern_price" id="nothern_price" class="form-control" value="{{desc.nothern_region}}">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label for="categoryUpdateType">Subcategory Name</label>
+                        <select id="categoryUpdateType" class="form-control checkField">
+                            <option value="newStock">Subcategory 1</option>
+                            <option value="deficit">Subcategory 2</option>
+                        </select>
+                        <span class="help-block errMsg" id="categoryUpdateTypeErr"></span>
+                    </div>
+                    <button  type="submit" class="btn btn-danger" id="stockUpdateSubmit">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body%}

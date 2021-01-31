@@ -124,7 +124,7 @@ def insert_category():
 @app.route('/add/subcategory', methods=['POST'])
 def insert_subcategory():
     data = request.form.get('name')
-    category = request.form.get('category')
+    category = request.form.get('category_id')
     cat = Subcategory(name=data, category=category)
     db.session.add(cat)
     db.session.commit()
@@ -162,13 +162,13 @@ def delete_subcategory():
     return redirect(url_for('home'))
 
 # delete description
-@app.route('/delete/description/', methods=['POST'])
+@app.route('/delete/description/<int:id>', methods=['POST'])
 @adminsonly()
-def delete_description():
-    prod_id = request.form.get('id')
-    desc = Description.query.filter_by(category_id=prod_id).first()
+def delete_description(id):
+    desc = Description.query.filter_by(category_id=id).first()
     db.session.delete(desc)
     db.session.commit()
+    flash('description sucessfully deleted', 'danger')
     return redirect(url_for('home'))
 
 
@@ -190,6 +190,21 @@ def update_subcategory():
     name = request.form.get('id')
     cat = Subcategory.query.filter_by(id=id).first()
     cat.name = name
+    db.session.commit()
+    return redirect(url_for('home'))
+
+@app.route('/update/description/<int:id>', methods=['GET', 'POST'])
+@adminsonly()
+def update_description(id):
+    desc = Description.query.filter_by(id=id).first_or_404()
+    if request.method == 'GET':
+        return render_template('update.html', desc=desc)
+    desc.name = request.form.get('name')
+    desc.unit = request.form.get('unit')
+    desc.western_region = int(request.form.get('western_price'))
+    desc.nairobi_region = int(request.form.get('nairobi_price'))
+    desc.nothern_region = int(request.form.get('nothern_price'))
+    desc.coastal_region = int(request.form.get('coastal_price'))
     db.session.commit()
     return redirect(url_for('home'))
 

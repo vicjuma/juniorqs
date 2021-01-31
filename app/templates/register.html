@@ -63,22 +63,57 @@
                     <label>{{ form.lastname.label(class="sr-only") }}<i class="fas fa-user" style="font-size:1.5rem;margin:1.5rem"></i></label>
                     {{ form.lastname(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.lastname.errors%}
+                  {% for errors in form.lastname.errors%}
+                  <div>
+                    <p class="text text-danger">{{errors}}</p>
+                  </div>
+                  {%endfor%}
+                {%endif%}
                   <div class="form-group" style="display:flex">
                     <label>{{ form.username.label(class="sr-only") }}<i class="fas fa-user" style="font-size:1.5rem;margin:1.5rem"></i></label>
                     {{ form.username(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.username.errors%}
+                  {% for errors in form.username.errors%}
+                  <div>
+                    <p class="text text-danger">{{errors}}</p>
+                  </div>
+                  {%endfor%}
+                {%endif%}
                   <div class="form-group" style="display:flex; position: relative;">
                     <label>{{ form.email.label(class="sr-only") }}<i class="fas fa-at" style="font-size:1.5rem;margin:1.5rem;"></i></label>
                     {{ form.email(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.email.errors%}
+                  {% for errors in form.email.errors%}
+                  <div>
+                    <p class="text text-danger">{{errors}}</p>
+                  </div>
+                  {%endfor%}
+                {%endif%}
                   <div class="form-group" style="display:flex">
                     <label>{{ form.password.label(class="sr-only") }}<i class="fas fa-lock" style="font-size:1.5rem;margin:1.5rem"></i></label>
                     {{ form.password(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.password.errors%}
+                  {% for errors in form.password.errors%}
+                  <div>
+                    <p class="text text-danger">{{errors}}</p>
+                  </div>
+                  {%endfor%}
+                {%endif%}
                   <div class="form-group" style="display:flex">
                     <label>{{ form.confirm_password.label(class="sr-only") }}<i class="fas fa-lock" style="font-size:1.5rem;margin:1.5rem"></i></label>
                     {{ form.confirm_password(class="form-control checkField", autocomplete="off")}}
                   </div>
+                  {% if form.confirm_password.errors%}
+                  {% for errors in form.confirm_password.errors%}
+                  <div>
+                    <p class="text text-danger">{{errors}}</p>
+                  </div>
+                  {%endfor%}
+                {%endif%}
                   <div style="text-align: center;">
                     {{ form.submit_signup(class='btn btn-primary')}}
                   </div>

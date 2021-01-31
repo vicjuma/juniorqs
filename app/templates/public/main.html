@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </style>
+    <title>Categories Items and Descriptions</title>
+    <link rel="shortcut icon" href="http://sales.mouseinc.net/public/images/icon.ico">
+    <!-- bootstrap links -->
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/bootstrap-theme.min.css')}}">
+
+    
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="./static/css/font-awesome-animation.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/e6bee6f630.js" crossorigin="anonymous"></script>
+
+    <script src="{{url_for('static', filename='scripts/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='scripts/bootstrap.min.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    <script src="{{url_for('static', filename='scripts/main.js')}}"></script>
+    <script src="{{url_for('static', filename='scripts/fetch.js')}}"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        {% if current_user.is_authenticated%}
+        {% if current_user.is_admin == True%}
+        <a href="{{url_for('home')}}">Dashboard</a>
+        {% endif%}
+        <a href="{{url_for('logout')}}">logout</a>
+        {% else %}
+        <a href="{{url_for('login')}}">login</a>
+        <a href="{{url_for('register')}}">register</a>
+        {% endif %}
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" style="margin-top:2">
+                    JuniorQS
+                </a>
+            </div>
+            </ul>
+            {% if current_user.is_authenticated and current_user.is_admin == True%}
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a>
+                        <b><span>Admin Name: {{current_user.username}}</span></b>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fa fa-user navbarIcons"></i>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-menu-header text-center">
+                            <strong>Account</strong>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{{url_for('logout')}}">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            {% endif%}
+        </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    
+    {%block body%}
+    {%endblock body%}
+</body>
+<script src="./static/scripts/items.js"></script>
+{% block scripts%}
+
+{% endblock scripts%}
+
+</html>
